@@ -111,24 +111,22 @@ Function Get-PuppetJobNodes {
 
 Function Invoke-PuppetTask {
 <#
-$parameters = [PSCustomObject]@{
-    action = 'get'
-}
-
-$scope = @('sea1-node-1.ad.piccola.us')
+$scope = @('den3-node-1.ad.piccola.us','den3-node-3.ad.piccola.us','den3-node-4.ad.piccola.us','den3-node-5.ad.piccola.us')
 
 $splat = @{
     Token = 'AKSeiFY0KJkQxUe6ovYfRQ9JbKjXY8So1GoCApkAMzOZ'
     Master = 'puppet.piccola.us'
     Task = 'powershell_tasks::disablesmbv1'
-    Environment = 'production'
-    Parameters = $parameters
-    #Description = ''
+    Environment = 'development'
+    Parameters = [PSCustomObject]@{
+        action = 'get'
+    }
+    Description = 'This was run from PowerShell'
     Scope = $scope
     ScopeType = 'nodes'
 }
 
-Invoke-PuppetTask @splat
+Invoke-PuppetTask @splat -Wait -Timeout 120
 #>
     Param(
         [Parameter(Mandatory)]
@@ -147,7 +145,11 @@ Invoke-PuppetTask @splat
         [PSCustomObject[]]$Scope,
         [Parameter(Mandatory)]
         [ValidateSet('nodes')]
-        [string]$ScopeType
+        [string]$ScopeType,
+        [Parameter()]
+        [switch]$Wait,
+        [Parameter()]
+        [int]$Timeout = 300
     )
 
     $req = [PSCustomObject]@{
@@ -156,7 +158,7 @@ Invoke-PuppetTask @splat
         params      = $Parameters
         description = $Description
         scope       = [PSCustomObject]@{
-            $ScopeType = $Scope
+        $ScopeType = $Scope
         }
     } | ConvertTo-Json
 
@@ -166,7 +168,42 @@ Invoke-PuppetTask @splat
     $result  = Invoke-WebRequest -Uri $hoststr -Method Post -Headers $headers -Body $req
     $content = $result.content | ConvertFrom-Json
 
-    Write-Output $content
+    if ($wait) {
+        # sleep 5s for the job to register
+        Start-Sleep -Seconds 5
+
+        $jobSplat = @{
+            token = $Token
+            master = $master
+            id = $content.job.name
+        }
+
+        # create a timespan
+        $timespan = New-TimeSpan -Seconds $timeout
+        # start a timer
+        $stopwatch = [diagnostics.stopwatch]::StartNew()
+
+        # get the job state every 5 seconds until our timeout is met
+        while ($stopwatch.elapsed -lt $timespan) {
+            # optoins are new, ready, running, stopping, stopped, finished, or failed
+            $job = Get-PuppetJob @jobSplat
+            if (($job.State -eq 'stopped') -or ($job.State -eq 'finished') -or ($job.State -eq 'failed')) {
+                $taskJobContent = [PSCustomObject]@{
+                    task = $content
+                    job = $job
+                }
+                Write-Output $taskJobContent
+                break
+            }
+            Start-Sleep -Seconds 5
+        }
+        if ($stopwatch.elapsed -ge $timespan) {
+            Write-Error "Timeout of $Timeout`s has exceeded."
+            break
+        }
+    } else {
+        Write-Output $content
+    }
 }
 
 function Get-PuppetPCPNodeBrokerDetails {
