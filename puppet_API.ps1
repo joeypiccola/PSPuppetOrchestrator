@@ -318,59 +318,6 @@ Function Get-PuppetNodeFacts {
     $result = Invoke-WebRequest -Uri $hoststr -Method Get -Body $query -Headers $headers
     $content = $result | ConvertFrom-Json
 
-    Write-Output $content.value
-}
-
-function Get-PDBNodeFact {
-
-    Param (
-        [parameter(position=1)]
-        [string]
-        $Certname,
-        [parameter(position=2)]
-        [string]
-        $FactName,
-        [ValidateNotNull()]
-        [string]$BaseUri = $PDBConfig.BaseUri,
-        [ValidateNotNull()]
-        [X509Certificate]$Certificate = $PDBConfig.Certificate
-    )
-    $URI = Join-Parts -Separator '/' -Parts $BaseUri, nodes, $Certname, facts, $FactName
-    $h = @{}
-    $IRMParams = @{
-        Uri = $URI
-    }
-    if($Certificate){
-        $IRMParams.add('Certificate',$Certificate)
-    }
-    $r = Invoke-RestMethod @IRMParams
-    if($r.count -gt 0)
-    {
-        $r | foreach-object { [void]$h.set_item($_.Name, $_.Value) }
-        [pscustomobject]$h
-    }
-}
-
-Function Get-PuppetNodeFacts {
-    Param(
-        [Parameter(Mandatory)]
-        [string]$Token,
-        [Parameter(Mandatory)]
-        [string]$Master,
-        [Parameter(Mandatory)]
-        [string]$Node
-    )
-
-    $hoststr = "https://$master`:8081/pdb/query/v4/facts"
-    $headers = @{'X-Authentication' = $Token}
-
-    $query = @{
-        query = "[""="", ""certname"", ""$node""]"
-    }
-
-    $result = Invoke-WebRequest -Uri $hoststr -Method Get -Body $query -Headers $headers
-    $content = $result | ConvertFrom-Json
-
     # borrowed from Warren Frame
     $h = @{}
     $content | foreach-object { [void]$h.set_item($_.Name, $_.Value) }
