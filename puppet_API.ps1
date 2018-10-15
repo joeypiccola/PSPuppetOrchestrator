@@ -324,3 +324,25 @@ Function Get-PuppetNodeFacts {
     [pscustomobject]$h
 
 }
+
+Function Get-PuppetNodeFact {
+    Param(
+        [Parameter(Mandatory)]
+        [string]$Token,
+        [Parameter(Mandatory)]
+        [string]$Master,
+        [Parameter(Mandatory)]
+        [string]$Node,
+        [Parameter(Mandatory)]
+        [string]$Fact
+    )
+
+    # This is a shortcut to the /pdb/query/v4/facts endpoint.
+    $hoststr = "https://$master`:8081/pdb/query/v4/nodes/$node/facts/$Fact"
+    $headers = @{'X-Authentication' = $Token}
+
+    $result = Invoke-WebRequest -Uri $hoststr -Method Get -Headers $headers
+    $content = $result.content | ConvertFrom-Json
+
+    Write-Output $content.value
+}
