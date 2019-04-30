@@ -10,9 +10,7 @@ Function Get-PuppetJobReport {
 
     $hoststr = "https://$master`:8143/orchestrator/v1/jobs/$id/report"
     $headers = @{'X-Authentication' = $Token}
-
     $result  = Invoke-RestMethod -Uri $hoststr -Method Get -Headers $headers
-
     foreach ($server in $result) {
         write-output $server
     }
