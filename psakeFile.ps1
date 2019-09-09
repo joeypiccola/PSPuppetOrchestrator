@@ -69,11 +69,21 @@ task Pester -Depends Build {
 
 task Build -depends Compile, CreateMarkdownHelp, CreateExternalHelp {
     $OutputModDirDataFile = Join-Path -Path $OutputModDir -ChildPath "$($ENV:BHProjectName).psd1"
-    Write-Verbose "OutputModDirDataFile $OutputModDirDataFile"
-    Write-Verbose "outputModVerDir $outputModVerDir"
-    Write-Verbose "outputDir $outputDir"
-    Write-Verbose -Message 'Adding exported functions to psd1...'
+    # Bump the module version if we didn't already
+    Try
+    {
+        $GalleryVersion = Get-NextNugetPackageVersion -Name $env:BHProjectName -ErrorAction Stop
+        $GithubVersion = Get-MetaData -Path $env:BHPSModuleManifest -PropertyName ModuleVersion -ErrorAction Stop
+        if($GalleryVersion -ge $GithubVersion) {
+            Update-Metadata -Path $env:BHPSModuleManifest -PropertyName ModuleVersion -Value $GalleryVersion -ErrorAction stop
+        }
+    }
+    Catch
+    {
+        "Failed to update version for '$env:BHProjectName': $_.`nContinuing with existing version"
+    }
     Push-Location -Path $OutputDir
+    Write-Verbose -Message 'Adding exported functions to psd1...'
     Set-ModuleFunction
     Pop-Location
     "    Exported public functions added to output data file at [$OutputModDirDataFile]"
@@ -137,10 +147,10 @@ Task RegenerateHelp -Depends UpdateMarkdownHelp, CreateExternalHelp
 task Publish -Depends Test {
     "    Publishing version [$($manifest.ModuleVersion)] to PSGallery..."
     Publish-Module -Path $OutputModDir -NuGetApiKey $env:PSGALLERY_API_KEY -Repository PSGallery
-}
+} -description 'Publish module'
 
 task UploadTestResults {
     # upload results to AppVeyor
     $wc = New-Object 'System.Net.WebClient'
     $wc.UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Join-Path -Path $OutputDir -ChildPath 'testResults.xml'))
-}
+} -description 'Uploading tests'
