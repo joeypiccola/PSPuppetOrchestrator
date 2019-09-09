@@ -11,6 +11,10 @@ skip_commits:
   message: /updated readme.*|update readme.*s/
 build: off
 
+install:
+  - ps:   ./build.ps1 -Bootstrap
+  - pwsh: ./build.ps1 -Bootstrap
+
 # Kick off the CI/CD pipeline
 test_script:
   - ps:   if ($env:PowerShellEdition -eq 'WindowsPowerShell') { . .\build.ps1 -Task Test }
