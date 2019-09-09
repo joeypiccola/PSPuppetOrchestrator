@@ -12,6 +12,8 @@ properties {
 }
 
 task default -depends Test
+task RegenerateHelp -Depends UpdateMarkdownHelp, CreateExternalHelp -description 'Regenerate help'
+task Test -Depends Init, Analyze, Pester -description 'Run test suite'
 
 task Init {
     "`nSTATUS: Testing with PowerShell $psVersion"
@@ -19,8 +21,6 @@ task Init {
     Get-Item ENV:BH*
     "`n"
 } -description 'Initialize build environment'
-
-task Test -Depends Init, Analyze, Pester -description 'Run test suite'
 
 task Analyze -Depends Build {
     $analysis = Invoke-ScriptAnalyzer -Path $outputModDir -Verbose:$false
@@ -141,8 +141,6 @@ task UpdateMarkdownHelp -Depends Compile {
 task CreateExternalHelp -Depends CreateMarkdownHelp {
     New-ExternalHelp "$projectRoot\docs\reference\functions" -OutputPath "$OutputModDir\en-US" -Force > $null
 } -description 'Create module help from markdown files'
-
-Task RegenerateHelp -Depends UpdateMarkdownHelp, CreateExternalHelp
 
 task Publish -Depends Test {
     "    Publishing version [$($manifest.ModuleVersion)] to PSGallery..."
