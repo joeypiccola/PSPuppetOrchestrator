@@ -17,4 +17,6 @@
     'PowerShellBuild' = @{
         Version = '0.3.0'
     }
+    PSScriptAnalyzer = 'latest'
+    platyPS          = 'latest'
 }
