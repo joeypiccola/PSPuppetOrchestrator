@@ -1,6 +1,6 @@
-| Appveyor | PS Gallery |
-|--------|--------------------|
-![Build status](https://ci.appveyor.com/api/projects/status/6g7fk7xes4vn5fog?svg=true) | ![PowerShell Gallery](https://img.shields.io/powershellgallery/dt/pspuppetorchestrator) |
+| Appveyor | PS Gallery | PS Gallery Version|
+|--------|--------|--------|
+![Build status](https://ci.appveyor.com/api/projects/status/6g7fk7xes4vn5fog?svg=true) | ![PowerShell Gallery](https://img.shields.io/powershellgallery/dt/pspuppetorchestrator) | ![PowerShell Gallery](https://img.shields.io/powershellgallery/v/pspuppetorchestrator) |
 
 # PSPuppetOrchestrator
 
