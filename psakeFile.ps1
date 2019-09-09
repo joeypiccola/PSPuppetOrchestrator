@@ -142,5 +142,5 @@ task Publish -Depends Test {
 task UploadTestResults {
     # upload results to AppVeyor
     $wc = New-Object 'System.Net.WebClient'
-    $wc.UploadFile("https://ci.appveyor.com/api/testresults/xunit/$($env:APPVEYOR_JOB_ID)", (Join-Path -Path $OutputModDir -ChildPath 'testResults.xml'))
+    $wc.UploadFile("https://ci.appveyor.com/api/testresults/xunit/$($env:APPVEYOR_JOB_ID)", (Join-Path -Path $OutputDir -ChildPath 'testResults.xml'))
 }
