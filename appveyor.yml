@@ -17,4 +17,4 @@ test_script:
   - pwsh: if ($env:PowerShellEdition -eq 'PowerShellCore')    { . .\build.ps1 -Bootstrap -Task Test }
 
 on_finish:
-  - ps: { . .\Build.ps1 -Task UploadTestResults}
+  - ps: if ($env:PowerShellEdition -eq 'WindowsPowerShell') { . .\Build.ps1 -Task UploadTestResults}
