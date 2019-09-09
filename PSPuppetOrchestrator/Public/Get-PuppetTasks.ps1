@@ -1,19 +1,25 @@
 Function Get-PuppetTasks {
     <#
     .SYNOPSIS
-        Returns Hello world
+        Get a list of Puppet Tasks.
     .DESCRIPTION
-        Returns Hello world
+        Get a list of Puppet Tasks.
     .PARAMETER Environment
-        x
+        The environment to use.
     .PARAMETER Token
-        x
+        The Puppet API orchestrator token.
     .PARAMETER Master
-        x
+        The Puppet master.
     .EXAMPLE
-        PS> Get-HelloWorld
+        PS> Get-PuppetTasks -token $token -master $master
 
-        Runs the command
+        id                                                                       name                            permitted
+        --                                                                       ----                            ---------
+        https://puppet:8143/orchestrator/v1/tasks/powershell_tasks/getkb         powershell_tasks::getkb         True
+        https://puppet:8143/orchestrator/v1/tasks/powershell_tasks/account_audit powershell_tasks::account_audit True
+        https://puppet:8143/orchestrator/v1/tasks/powershell_tasks/switch        powershell_tasks::switch        True
+        https://puppet:8143/orchestrator/v1/tasks/powershell_tasks/ps1exec       powershell_tasks::ps1exec       True
+        https://puppet:8143/orchestrator/v1/tasks/powershell_tasks/disablesmbv1  powershell_tasks::disablesmbv1  True
     #>
 
     Param(
@@ -28,5 +34,5 @@ Function Get-PuppetTasks {
     $headers = @{'X-Authentication' = $Token}
     $body    = @{'environment' = $environment}
     $result  = Invoke-RestMethod -Uri $uri -Method Get -Headers $headers -Body $body
-    Write-Output $result
+    Write-Output $result.items
 }

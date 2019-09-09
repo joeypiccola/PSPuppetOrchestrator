@@ -1,19 +1,23 @@
 Function Get-PuppetJobReport {
     <#
     .SYNOPSIS
-        Returns Hello world
+        Get the report for a given Puppet job.
     .DESCRIPTION
-        Returns Hello world
+        Get the report for a given Puppet job.
     .PARAMETER ID
-        x
+        The ID of the job.
     .PARAMETER Token
-        x
+        The Puppet API orchestrator token.
     .PARAMETER Master
-        x
+        The Puppet master.
     .EXAMPLE
-        PS> Get-HelloWorld
+        PS> Get-PuppetJobReport -Master $master -Token $token -ID 906
 
-        Runs the command
+        node           state    start_timestamp      finish_timestamp     timestamp            events
+        ----           -----    ---------------      ----------------     ---------            ------
+        den3w108r2psv2 failed   2019-09-04T16:50:10Z 2019-09-04T16:50:12Z 2019-09-04T16:50:12Z {}
+        den3w108r2psv3 finished 2019-09-04T16:50:10Z 2019-09-04T16:50:42Z 2019-09-04T16:50:42Z {}
+        den3w108r2psv4 finished 2019-09-04T16:50:10Z 2019-09-04T16:50:43Z 2019-09-04T16:50:43Z {}
     #>
 
     Param(
@@ -28,7 +32,8 @@ Function Get-PuppetJobReport {
     $hoststr = "https://$master`:8143/orchestrator/v1/jobs/$id/report"
     $headers = @{'X-Authentication' = $Token}
     $result  = Invoke-RestMethod -Uri $hoststr -Method Get -Headers $headers
-    foreach ($server in $result) {
-        write-output $server
+    $result.count
+    foreach ($server in $result.report) {
+        Write-Output $server
     }
 }

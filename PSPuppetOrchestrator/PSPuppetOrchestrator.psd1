@@ -24,7 +24,7 @@ GUID = '3eb5206e-9bf0-4fd9-b950-1eef515b957e'
 Author = 'Joey Piccola'
 
 # Company or vendor of this module
-CompanyName = 'Unknown'
+CompanyName = 'Community'
 
 # Copyright statement for this module
 Copyright = '(c) 2019 Joey Piccola. All rights reserved.'
@@ -33,7 +33,7 @@ Copyright = '(c) 2019 Joey Piccola. All rights reserved.'
 Description = 'PowerShell module for calling the Puppet Orchestrator API.'
 
 # Minimum version of the Windows PowerShell engine required by this module
-# PowerShellVersion = ''
+PowerShellVersion = '5.0'
 
 # Name of the Windows PowerShell host required by this module
 # PowerShellHostName = ''
@@ -95,19 +95,19 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        # Tags = @()
+        Tags = @('puppet','orchestrator','tasks','task','jobs','job')
 
         # A URL to the license for this module.
-        # LicenseUri = ''
+        LicenseUri = 'https://raw.githubusercontent.com/joeypiccola/PSPuppetOrchestrator/master/LICENSE'
 
         # A URL to the main website for this project.
-        # ProjectUri = ''
+        ProjectUri = 'https://github.com/joeypiccola/PSPuppetOrchestrator'
 
         # A URL to an icon representing this module.
         # IconUri = ''
 
         # ReleaseNotes of this module
-        # ReleaseNotes = ''
+        ReleaseNotes = 'https://raw.githubusercontent.com/joeypiccola/PSPuppetOrchestrator/master/CHANGELOG.md'
 
     } # End of PSData hashtable
 

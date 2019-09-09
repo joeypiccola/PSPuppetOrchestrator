@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-PuppetTasks
 
 ## SYNOPSIS
-Returns Hello world
+Get a list of Puppet Tasks.
 
 ## SYNTAX
 
@@ -17,21 +17,27 @@ Get-PuppetTasks [-token] <String> [-master] <String> [[-environment] <String>] [
 ```
 
 ## DESCRIPTION
-Returns Hello world
+Get a list of Puppet Tasks.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Get-HelloWorld
+Get-PuppetTasks -token $token -master $master
 ```
 
-Runs the command
+id                                                                       name                            permitted
+--                                                                       ----                            ---------
+https://puppet:8143/orchestrator/v1/tasks/powershell_tasks/getkb         powershell_tasks::getkb         True
+https://puppet:8143/orchestrator/v1/tasks/powershell_tasks/account_audit powershell_tasks::account_audit True
+https://puppet:8143/orchestrator/v1/tasks/powershell_tasks/switch        powershell_tasks::switch        True
+https://puppet:8143/orchestrator/v1/tasks/powershell_tasks/ps1exec       powershell_tasks::ps1exec       True
+https://puppet:8143/orchestrator/v1/tasks/powershell_tasks/disablesmbv1  powershell_tasks::disablesmbv1  True
 
 ## PARAMETERS
 
 ### -token
-x
+The Puppet API orchestrator token.
 
 ```yaml
 Type: String
@@ -46,7 +52,7 @@ Accept wildcard characters: False
 ```
 
 ### -master
-x
+The Puppet master.
 
 ```yaml
 Type: String
@@ -61,7 +67,7 @@ Accept wildcard characters: False
 ```
 
 ### -environment
-x
+The environment to use.
 
 ```yaml
 Type: String

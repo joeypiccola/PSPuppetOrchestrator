@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-PuppetJobReport
 
 ## SYNOPSIS
-Returns Hello world
+Get the report for a given Puppet job.
 
 ## SYNTAX
 
@@ -17,21 +17,25 @@ Get-PuppetJobReport [-ID] <Int32> [-Token] <String> [-Master] <String> [<CommonP
 ```
 
 ## DESCRIPTION
-Returns Hello world
+Get the report for a given Puppet job.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Get-HelloWorld
+Get-PuppetJobReport -Master $master -Token $token -ID 906
 ```
 
-Runs the command
+node           state    start_timestamp      finish_timestamp     timestamp            events
+----           -----    ---------------      ----------------     ---------            ------
+den3w108r2psv2 failed   2019-09-04T16:50:10Z 2019-09-04T16:50:12Z 2019-09-04T16:50:12Z {}
+den3w108r2psv3 finished 2019-09-04T16:50:10Z 2019-09-04T16:50:42Z 2019-09-04T16:50:42Z {}
+den3w108r2psv4 finished 2019-09-04T16:50:10Z 2019-09-04T16:50:43Z 2019-09-04T16:50:43Z {}
 
 ## PARAMETERS
 
 ### -ID
-x
+The ID of the job.
 
 ```yaml
 Type: Int32
@@ -46,7 +50,7 @@ Accept wildcard characters: False
 ```
 
 ### -Token
-x
+The Puppet API orchestrator token.
 
 ```yaml
 Type: String
@@ -61,7 +65,7 @@ Accept wildcard characters: False
 ```
 
 ### -Master
-x
+The Puppet master.
 
 ```yaml
 Type: String
