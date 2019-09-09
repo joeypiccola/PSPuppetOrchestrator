@@ -134,7 +134,13 @@ task CreateExternalHelp -Depends CreateMarkdownHelp {
 
 Task RegenerateHelp -Depends UpdateMarkdownHelp, CreateExternalHelp
 
-Task Publish -Depends Test {
+task Publish -Depends Test {
     "    Publishing version [$($manifest.ModuleVersion)] to PSGallery..."
     Publish-Module -Path $OutputModDir -NuGetApiKey $env:PSGALLERY_API_KEY -Repository PSGallery
+}
+
+task UploadTestResults {
+    # upload results to AppVeyor
+    $wc = New-Object 'System.Net.WebClient'
+    $wc.UploadFile("https://ci.appveyor.com/api/testresults/xunit/$($env:APPVEYOR_JOB_ID)", (Join-Path -Path $OutputModDir -ChildPath 'testResults.xml'))
 }
