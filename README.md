@@ -32,7 +32,7 @@ https://puppet:8143/orchestrator/v1/tasks/powershell_tasks/disablesmbv1  powersh
 ### Run tasks
 Create a parameter splat.
 ```powershell
-$scope = @('den3w112r2psv4.','den3w108r2psv3.')
+$scope = @('den3w112r2psv4','den3w108r2psv3')
 $invokePuppetTaskSplat = @{
     Token = $token
     Master = $master
@@ -89,14 +89,14 @@ PS> Get-PuppetJobReport -Master $master -Token $token -ID 913
 ```
 OUTPUT
 ```plaintext
-node             : den3w108r2psv3.
+node             : den3w108r2psv3
 state            : finished
 start_timestamp  : 2019-09-09T16:54:07Z
 finish_timestamp : 2019-09-09T16:54:09Z
 timestamp        : 2019-09-09T16:54:09Z
 events           : {}
 
-node             : den3w112r2psv4.
+node             : den3w112r2psv4
 state            : finished
 start_timestamp  : 2019-09-09T16:54:07Z
 finish_timestamp : 2019-09-09T16:54:13Z
@@ -114,7 +114,7 @@ OUTPUT
 finish_timestamp : 2019-09-09T16:54:09Z
 transaction_uuid :
 start_timestamp  : 2019-09-09T16:54:07Z
-name             : den3w108r2psv3.
+name             : den3w108r2psv3
 duration         : 2.032
 state            : finished
 details          :
@@ -125,7 +125,7 @@ timestamp        : 2019-09-09T16:54:09Z
 finish_timestamp : 2019-09-09T16:54:13Z
 transaction_uuid :
 start_timestamp  : 2019-09-09T16:54:07Z
-name             : den3w112r2psv4.
+name             : den3w112r2psv4
 duration         : 5.071
 state            : finished
 details          :
@@ -133,7 +133,7 @@ result           : @{_output=}
 latest-event-id  : 5582
 timestamp        : 2019-09-09T16:54:13Z
 ```
-
+### Get task results continued
 The following output is from the `powershell_tasks::getkb` that generates output.
 ```powershell
 PS> Get-PuppetJobResults -Master $master -Token $token -ID 915 -OutVariable 'PuppetJobResults'
@@ -143,7 +143,7 @@ OUTPUT
 finish_timestamp : 2019-09-09T17:16:03Z
 transaction_uuid :
 start_timestamp  : 2019-09-09T17:15:48Z
-name             : den3w108r2psv3.
+name             : den3w108r2psv3
 duration         : 15.645
 state            : finished
 details          :
@@ -154,7 +154,7 @@ timestamp        : 2019-09-09T17:16:03Z
 finish_timestamp : 2019-09-09T17:16:04Z
 transaction_uuid :
 start_timestamp  : 2019-09-09T17:15:48Z
-name             : den3w108r2psv4.
+name             : den3w108r2psv4
 duration         : 15.989
 state            : finished
 details          :
@@ -165,7 +165,7 @@ timestamp        : 2019-09-09T17:16:04Z
 finish_timestamp : 2019-09-09T17:16:09Z
 transaction_uuid :
 start_timestamp  : 2019-09-09T17:15:48Z
-name             : den3w108r2psv5.
+name             : den3w108r2psv5
 duration         : 21.802
 state            : finished
 details          :
@@ -173,6 +173,7 @@ result           : @{Source=DEN3W108R2PSV5; HotFixID=KB2620704; Description=Secu
 latest-event-id  : 5598
 timestamp        : 2019-09-09T17:16:09Z
 ```
+Using `-OutVariable 'PuppetJobResults'` from before we can access the `results` for each node the task was run against.
 ```powershell
 PS C:\> $PuppetJobResults.result
 ```
