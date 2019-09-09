@@ -86,11 +86,7 @@ Function Invoke-PuppetTask {
             # options are new, ready, running, stopping, stopped, finished, or failed
             $job = Get-PuppetJob @jobSplat
             if (($job.State -eq 'stopped') -or ($job.State -eq 'finished') -or ($job.State -eq 'failed')) {
-                $taskJobContent = [PSCustomObject]@{
-                    task = $content
-                    job = $job
-                }
-                Write-Output $taskJobContent
+                Write-Output $job
                 break
             }
             Start-Sleep -Seconds 5
@@ -100,6 +96,6 @@ Function Invoke-PuppetTask {
             break
         }
     } else {
-        Write-Output $content
+        Write-Output $content.job
     }
 }
