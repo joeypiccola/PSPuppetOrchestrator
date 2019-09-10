@@ -5,7 +5,7 @@ Function Invoke-PuppetTask {
     .DESCRIPTION
         Returns Hello world
     .PARAMETER Token
-        x
+        The Puppet API orchestrator token.
     .PARAMETER Master
         x
     .PARAMETER Task

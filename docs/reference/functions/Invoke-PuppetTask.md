@@ -33,7 +33,7 @@ Runs the command
 ## PARAMETERS
 
 ### -Token
-x
+The Puppet API orchestrator token.
 
 ```yaml
 Type: String
