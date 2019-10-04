@@ -12,6 +12,11 @@ properties {
     $projectLocale = 'en-US'
 }
 
+<#
+    hi there, if you're looking to contriubute please understand this psakeFile is a work in progress.
+    pretty sloppy and a bit of a mess at the moment.
+#>
+
 task default -depends Test
 task RegenerateHelp -Depends UpdateMarkdownHelp, CreateExternalHelp -description 'Regenerate help'
 task Test -Depends Init, Analyze, Pester -description 'Run test suite'
@@ -131,10 +136,7 @@ task CreateMarkdownHelp -Depends Compile {
 } -description 'Create initial markdown help files'
 
 task UpdateMarkdownHelp -Depends Compile {
-    #Import-Module -Name $sut -Force -Verbose:$false
-    # Import-Module -Name $outputModDir -Verbose:$false -Force
     Import-Module -Name $outputModDir -Verbose:$false -Global
-    #$mdHelpPath = Join-Path -Path $projectRoot -ChildPath 'docs/reference/functions'
     $mdHelpPath = Join-Path -Path $projectRoot -ChildPath "docs\$projectLocale"
     $mdFiles = Update-MarkdownHelpModule -Path $mdHelpPath -Verbose:$false
     "    Markdown help updated at [$mdHelpPath]"
