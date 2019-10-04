@@ -214,7 +214,7 @@ InstalledOn : Thursday, September 06, 2018 12:00:00 AM
 ```
 
 ## License
-Timezone_win is released under the [MIT license](http://www.opensource.org/licenses/MIT).
+PSPuppetOrchestrator is released under the [MIT license](http://www.opensource.org/licenses/MIT).
 
 [appveyor]: https://ci.appveyor.com/project/joeypiccola/pspuppetorchestrator
 [appveyor-badge]: https://ci.appveyor.com/api/projects/status/6g7fk7xes4vn5fog/branch/master?svg=true&passingText=master%20-%20PASSING&pendingText=master%20-%20PENDING&failingText=master%20-%20FAILING
