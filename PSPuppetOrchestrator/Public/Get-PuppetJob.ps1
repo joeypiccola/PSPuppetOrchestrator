@@ -1,9 +1,9 @@
 Function Get-PuppetJob {
     <#
     .SYNOPSIS
-        Get details on a puppet job.
+        Get details on a Puppet job.
     .DESCRIPTION
-        Get details on a puppet job.
+        Get details on a Puppet job.
     .PARAMETER ID
         The ID of the job.
     .PARAMETER Token

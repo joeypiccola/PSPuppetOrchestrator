@@ -5,48 +5,52 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-PuppetJobResults
+# Get-PuppetPCPNodeBrokerDetails
 
 ## SYNOPSIS
-Returns Hello world
+Get a node's PCP broker details.
 
 ## SYNTAX
 
 ```
-Get-PuppetJobResults [-ID] <Int32> [-Token] <String> [-Master] <String> [<CommonParameters>]
+Get-PuppetPCPNodeBrokerDetails [-Token] <String> [-Master] <String> [-Node] <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Returns Hello world
+Get a node's PCP broker details.
+This is useful if you want to know the status of PCP before executing a task or plan.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Get-HelloWorld
+Get-PuppetPCPNodeBrokerDetails -Master $master -Token $token -Node 'den3w108r2psv3'
 ```
 
-Runs the command
+name      : den3w108r2psv3
+connected : True
+broker    : pcp://puppet/server
+timestamp : 10/2/19 2:01:53 AM
 
 ## PARAMETERS
 
-### -ID
-x
+### -Token
+The Puppet API orchestrator token.
 
 ```yaml
-Type: Int32
+Type: String
 Parameter Sets: (All)
 Aliases:
 
 Required: True
 Position: 1
-Default value: 0
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Token
-x
+### -Master
+The Puppet master.
 
 ```yaml
 Type: String
@@ -60,8 +64,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Master
-x
+### -Node
+The Puppet node name.
 
 ```yaml
 Type: String

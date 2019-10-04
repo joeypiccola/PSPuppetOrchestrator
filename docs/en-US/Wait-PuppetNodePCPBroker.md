@@ -18,7 +18,12 @@ Wait-PuppetNodePCPBroker [-Token] <String> [-Master] <String> [-Node] <String> [
 ```
 
 ## DESCRIPTION
-Returns Hello world
+Wait-PuppetNodePCPBroker was originally written in an effort to detect when nodes rebooted by
+evaluating a nodes's PCP Broker connected state.
+Since the advent of the reboot plan as seen
+in https://github.com/puppetlabs/puppetlabs-reboot/blob/master/plans/init.pp Wait-PuppetNodePCPBroker
+is no longer a viable solution.
+Never was to begin with really.
 
 ## EXAMPLES
 

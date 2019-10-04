@@ -3,20 +3,21 @@
         Target = 'CurrentUser'
     }
     'Pester' = @{
-        Version = '4.7.3'
-        Parameters = @{
-            SkipPublisherCheck = $true
-        }
+        Version = '4.9.0'
     }
     'psake' = @{
-        Version = '4.8.0'
+        Version = '4.9.0'
     }
     'BuildHelpers' = @{
         Version = '2.0.8'
     }
     'PowerShellBuild' = @{
-        Version = '0.3.0'
+        Version = '0.4.0'
     }
-    PSScriptAnalyzer = 'latest'
-    platyPS          = 'latest'
+    'PSScriptAnalyzer' = @{
+        Version = '1.18.3'
+    }
+    'platyPS' = @{
+        Version = '0.14.0'
+    }
 }

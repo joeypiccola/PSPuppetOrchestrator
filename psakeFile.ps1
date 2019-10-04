@@ -9,7 +9,13 @@ properties {
     $outputModDir = Join-Path -Path $outputDir -ChildPath $env:BHProjectName
     $manifest = Import-PowerShellDataFile -Path $env:BHPSModuleManifest
     $psVersion = $PSVersionTable.PSVersion.Major
+    $projectLocale = 'en-US'
 }
+
+<#
+    hi there, if you're looking to contriubute please understand this psakeFile is a work in progress.
+    pretty sloppy and a bit of a mess at the moment.
+#>
 
 task default -depends Test
 task RegenerateHelp -Depends UpdateMarkdownHelp, CreateExternalHelp -description 'Regenerate help'
@@ -120,7 +126,7 @@ task Clean -depends Init {
 task CreateMarkdownHelp -Depends Compile {
     # functions
     Import-Module -Name $outputModDir -Verbose:$false -Global
-    $mdHelpPath = Join-Path -Path $projectRoot -ChildPath 'docs/reference/functions'
+    $mdHelpPath = Join-Path -Path $projectRoot -ChildPath "docs/$projectLocale"
     $mdFiles = New-MarkdownHelp -Module $env:BHProjectName -OutputFolder $mdHelpPath -WithModulePage -Force
     "    $env:BHProjectName markdown help created at [$mdHelpPath]"
 
@@ -130,16 +136,14 @@ task CreateMarkdownHelp -Depends Compile {
 } -description 'Create initial markdown help files'
 
 task UpdateMarkdownHelp -Depends Compile {
-    #Import-Module -Name $sut -Force -Verbose:$false
-    # Import-Module -Name $outputModDir -Verbose:$false -Force
     Import-Module -Name $outputModDir -Verbose:$false -Global
-    $mdHelpPath = Join-Path -Path $projectRoot -ChildPath 'docs/reference/functions'
+    $mdHelpPath = Join-Path -Path $projectRoot -ChildPath "docs\$projectLocale"
     $mdFiles = Update-MarkdownHelpModule -Path $mdHelpPath -Verbose:$false
     "    Markdown help updated at [$mdHelpPath]"
 } -description 'Update markdown help files'
 
 task CreateExternalHelp -Depends CreateMarkdownHelp {
-    New-ExternalHelp "$projectRoot\docs\reference\functions" -OutputPath "$OutputModDir\en-US" -Force > $null
+    New-ExternalHelp "$projectRoot\docs\$projectLocale" -OutputPath "$OutputModDir" -Force > $null
 } -description 'Create module help from markdown files'
 
 task Publish -Depends Test {

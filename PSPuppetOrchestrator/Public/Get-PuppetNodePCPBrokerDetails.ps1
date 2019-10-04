@@ -1,19 +1,22 @@
 Function Get-PuppetPCPNodeBrokerDetails {
     <#
     .SYNOPSIS
-        Returns Hello world
+        Get a node's PCP broker details.
     .DESCRIPTION
-        Returns Hello world
+        Get a node's PCP broker details. This is useful if you want to know the status of PCP before executing a task or plan.
     .PARAMETER Node
-        x
+        The Puppet node name.
     .PARAMETER Token
-        x
+        The Puppet API orchestrator token.
     .PARAMETER Master
-        x
+        The Puppet master.
     .EXAMPLE
-        PS> Get-HelloWorld
+        PS> Get-PuppetPCPNodeBrokerDetails -Master $master -Token $token -Node 'den3w108r2psv3'
 
-        Runs the command
+        name      : den3w108r2psv3
+        connected : True
+        broker    : pcp://puppet/server
+        timestamp : 10/2/19 2:01:53 AM
     #>
 
     Param(

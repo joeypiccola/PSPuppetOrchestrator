@@ -8,27 +8,38 @@ schema: 2.0.0
 # Invoke-PuppetTask
 
 ## SYNOPSIS
-Returns Hello world
+Invoke a Puppet task.
 
 ## SYNTAX
 
 ```
 Invoke-PuppetTask [-Token] <String> [-Master] <String> [-Task] <String> [[-Environment] <String>]
- [[-Parameters] <PSObject>] [[-Description] <String>] [-Scope] <PSObject[]> [-ScopeType] <String>
- [[-Wait] <Int32>] [<CommonParameters>]
+ [[-Parameters] <Hashtable>] [[-Description] <String>] [-Scope] <String[]> [[-ScopeType] <String>]
+ [[-Wait] <Int32>] [[-WaitLoopInterval] <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Returns Hello world
+Invoke a Puppet task.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Get-HelloWorld
+$invokePuppetTaskSplat = @{
 ```
 
-Runs the command
+Token            = $token
+    Master           = $master
+    Task             = 'powershell_tasks::disablesmbv1'
+    Environment      = 'production'
+    Parameters       = @{action = 'set'; reboot = $true}
+    Description      = 'Disable smbv1 on 08r2 nodes.'
+    Scope            = @('DEN3W108R2PSV5','DEN3W108R2PSV4','DEN3W108R2PSV3')
+    ScopeType        = 'nodes'
+    Wait             = 120
+    WaitLoopInterval = 2
+}
+PS\> Invoke-PuppetTask @invokePuppetTaskSplat
 
 ## PARAMETERS
 
@@ -48,7 +59,7 @@ Accept wildcard characters: False
 ```
 
 ### -Master
-x
+The Puppet master.
 
 ```yaml
 Type: String
@@ -63,7 +74,7 @@ Accept wildcard characters: False
 ```
 
 ### -Task
-x
+The name of the Puppet task to invoke.
 
 ```yaml
 Type: String
@@ -78,7 +89,7 @@ Accept wildcard characters: False
 ```
 
 ### -Environment
-x
+The name of the Puppet task environment.
 
 ```yaml
 Type: String
@@ -93,10 +104,11 @@ Accept wildcard characters: False
 ```
 
 ### -Parameters
-x
+A hash of parameters to supply the Puppet task, e.g.
+$Parameters = @{tp1 = 'foo';tp2 = 'bar'; tp3 = $true}.
 
 ```yaml
-Type: PSObject
+Type: Hashtable
 Parameter Sets: (All)
 Aliases:
 
@@ -108,7 +120,7 @@ Accept wildcard characters: False
 ```
 
 ### -Description
-x
+A description to submit along with the task.
 
 ```yaml
 Type: String
@@ -123,10 +135,11 @@ Accept wildcard characters: False
 ```
 
 ### -Scope
-x
+An array of nodes the Puppet task will be invoked against, e.g.
+$Scope = @('DEN3W108R2PSV5','DEN3W108R2PSV4','DEN3W108R2PSV3').
 
 ```yaml
-Type: PSObject[]
+Type: String[]
 Parameter Sets: (All)
 Aliases:
 
@@ -138,22 +151,29 @@ Accept wildcard characters: False
 ```
 
 ### -ScopeType
-x
+When executing tasks against the /command/task API endpoint you can either use
+a scope type of 'node' or 'query'.
+At this time, PSPuppetOrchestrator only
+supports a ScopeType of 'node' which is the DEFAULT and only allowed option for
+the ScopeType parameter.
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: 8
-Default value: None
+Default value: Nodes
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -Wait
-x
+An optional wait value in seconds that Invoke-PuppetTask will use to wait until
+the invoked task completes.
+If the wait time is exceeded Invoke-PuppetTask will
+return a warning.
 
 ```yaml
 Type: Int32
@@ -163,6 +183,22 @@ Aliases:
 Required: False
 Position: 9
 Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -WaitLoopInterval
+An optional time in seconds that the wait feature will re-check the invoked task.
+DEFAULTS to 5s.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 10
+Default value: 5
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
