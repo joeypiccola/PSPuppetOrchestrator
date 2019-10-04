@@ -99,6 +99,13 @@ start_timestamp  : 2019-09-09T16:54:07Z
 finish_timestamp : 2019-09-09T16:54:13Z
 timestamp        : 2019-09-09T16:54:13Z
 events           : {}
+
+node             : den3w112r2psv5
+state            : finished
+start_timestamp  : 2019-09-09T16:54:07Z
+finish_timestamp : 2019-09-09T16:54:13Z
+timestamp        : 2019-09-09T16:54:13Z
+events           : {}
 ```
 
 ### Get tasks results
