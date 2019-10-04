@@ -32,19 +32,14 @@ https://puppet:8143/orchestrator/v1/tasks/powershell_tasks/disablesmbv1  powersh
 ### Run tasks
 Create a parameter splat.
 ```powershell
-$scope = @('den3w112r2psv4','den3w108r2psv3')
 $invokePuppetTaskSplat = @{
-    Token = $token
-    Master = $master
-    Task = 'powershell_tasks::disablesmbv1'
-    Environment = 'production'
-    Parameters = [PSCustomObject]@{
-        action = 'set'
-        reboot = $false
-    }
-    Description = 'Set SMBv1 on legacy nodes.'
-    Scope = $scope
-    ScopeType = 'nodes'
+    Token            = $token
+    Master           = $master
+    Task             = 'powershell_tasks::disablesmbv1'
+    Environment      = 'production'
+    Parameters       = @{action = 'set'; reboot = $true}
+    Description      = 'Disable smbv1 on 08r2 nodes.'
+    Scope            = @('DEN3W108R2PSV5','DEN3W108R2PSV4','DEN3W108R2PSV3')
 }
 ```
 Invoke the task `powershell_tasks::disablesmbv1`.
@@ -64,22 +59,24 @@ PS> Invoke-PuppetTask @invokePuppetTaskSplat -Wait 120
 ```
 OUTPUT
 ```
-description : Set SMBv1 on legacy nodes.
-report      : @{id=https://puppet:8143/orchestrator/v1/jobs/913/report}
-name        : 913
-events      : @{id=https://puppet:8143/orchestrator/v1/jobs/913/events}
+description : Disable smbv1 on 08r2 nodes.
+report      : @{id=https://puppet:8143/orchestrator/v1/jobs/940/report}
+name        : 940
+events      : @{id=https://puppet:8143/orchestrator/v1/jobs/940/events}
 command     : task
 type        : task
 state       : finished
-nodes       : @{id=https://puppet:8143/orchestrator/v1/jobs/913/nodes}
-status      : {@{state=ready; enter_time=2019-09-09T16:54:07Z; exit_time=2019-09-09T16:54:07Z}, @{state=running; enter_time=2019-09-09T16:54:07Z; exit_time=2019-09-09T16:54:13Z}, @{state=finished; enter_time=2019-09-09T16:54:13Z; exit_time=}}
-id          : https://puppet:8143/orchestrator/v1/jobs/913
+nodes       : @{id=https://puppet:8143/orchestrator/v1/jobs/940/nodes}
+status      : {@{state=ready; enter_time=10/4/19 6:17:50 PM; exit_time=10/4/19 6:17:50 PM}, @{state=running; enter_time=10/4/19 6:17:50 PM; exit_time=10/4/19 6:17:52 PM}, @{state=finished; enter_time=10/4/19
+              6:17:52 PM; exit_time=}}
+id          : https://puppet:8143/orchestrator/v1/jobs/940
 environment : @{name=production}
-options     : @{description=Set SMBv1 on legacy nodes.; transport=pxp; noop=False; task=powershell_tasks::disablesmbv1; sensitive=System.Object[]; params=; scope=; environment=production}
-timestamp   : 2019-09-09T16:54:13Z
-owner       : @{email=; is_revoked=False; last_login=2019-09-09T16:31:09.106Z; is_remote=False; login=admin; is_superuser=True; id=42bf351c-f9ec-40af-84ad-e976fec7f4bd; role_ids=System.Object[]; display_name=Administrator; is_group=False}
-node_count  : 2
-node_states : @{finished=2}
+options     : @{description=Disable smbv1 on 08r2 nodes.; transport=pxp; noop=False; task=powershell_tasks::disablesmbv1; sensitive=System.Object[]; scheduled-job-id=; params=; scope=; environment=production}
+timestamp   : 10/4/19 6:17:52 PM
+owner       : @{email=; is_revoked=False; last_login=10/4/19 5:52:55 PM; is_remote=False; login=admin; is_superuser=True; id=42bf351c-f9ec-40af-84ad-e976fec7f4bd; role_ids=System.Object[];
+              display_name=Administrator; is_group=False}
+node_count  : 3
+node_states : @{finished=3}
 ```
 
 ### Get task report
