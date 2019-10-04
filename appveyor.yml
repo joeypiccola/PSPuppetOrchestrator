@@ -8,7 +8,7 @@ environment:
       PowerShellEdition: WindowsPowerShell
 
 skip_commits:
-  message: /updated readme.*|update readme.|update changelog.*|update changelog.**s/
+  message: /updated readme.*|update readme.|update changelog.*|update changelog.*s/
 build: off
 
 # Kick off the CI/CD pipeline
