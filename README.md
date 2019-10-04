@@ -1,6 +1,6 @@
-| Appveyor | PS Gallery Downloads | PS Gallery Version|
-|--------|--------|--------|
-[![AppVeyor][appveyor-badge]][appveyor] | [![PowerShell Gallery][powershellgallery-downloads]][powershellgallery] | [![PowerShell Gallery][powershellgallery-version]][powershellgallery]
+| Appveyor | Appveyor Tests  | PS Gallery Downloads | PS Gallery Version|
+|--------|--------|--------|--------|
+[![AppVeyor][appveyor-badge]][appveyor] | [![AppVeyor][appveyor-badge-tests]][appveyor] | [![PowerShell Gallery][powershellgallery-downloads]][powershellgallery] | [![PowerShell Gallery][powershellgallery-version]][powershellgallery]
 
 # PSPuppetOrchestrator
 
@@ -211,6 +211,7 @@ Timezone_win is released under the [MIT license](http://www.opensource.org/licen
 
 [appveyor]: https://ci.appveyor.com/project/joeypiccola/pspuppetorchestrator
 [appveyor-badge]: https://ci.appveyor.com/api/projects/status/6g7fk7xes4vn5fog/branch/master?svg=true&passingText=master%20-%20PASSING&pendingText=master%20-%20PENDING&failingText=master%20-%20FAILING
+[appveyor-badge-tests]: https://img.shields.io/appveyor/tests/joeypiccola/pspuppetorchestrator/master
 [powershellgallery]: https://www.powershellgallery.com/packages/PSPuppetOrchestrator
 [powershellgallery-downloads]: https://img.shields.io/powershellgallery/dt/pspuppetorchestrator
 [powershellgallery-version]: https://img.shields.io/powershellgallery/v/pspuppetorchestrator
