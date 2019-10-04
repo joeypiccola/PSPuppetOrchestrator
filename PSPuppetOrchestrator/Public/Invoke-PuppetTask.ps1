@@ -91,9 +91,9 @@ Function Invoke-PuppetTask {
         Start-Sleep -Seconds 5
 
         $jobSplat = @{
-            token = $Token
+            token  = $Token
             master = $master
-            id = $content.job.name
+            id     = $content.job.name
         }
 
         # create a timespan
