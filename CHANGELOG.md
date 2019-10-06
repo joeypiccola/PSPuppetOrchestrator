@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [0.1.5]
 ### Added
- - tests
+ - added pester tests
+ - token nodes in readme
+ - be consistent with how we write out object with > item
 
 ## [0.1.4]
 ### Added
