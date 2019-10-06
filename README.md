@@ -11,7 +11,8 @@ PowerShell module for calling the Puppet Orchestrator API.
 ```powershell
 PS> Install-Module -Name PSPuppetOrchestrator
 ```
-## Functions
+
+## Included Functions
 `Invoke-PuppetTask`
 
 `Get-PuppetTask`
@@ -25,6 +26,32 @@ PS> Install-Module -Name PSPuppetOrchestrator
 `Get-PuppetJobResults`
 
 `Get-PuppetPCPNodeBrokerDetails`
+
+## Token
+In order to call the `orchestrator` API endpoint you'll need a user token. There are a couple methods to acquire a Puppet Enterprise user token. In the spirit of using PowerShell, below is a script to get a token via the `rbac-api` endpoint. Specify a numeric value followed by “y” (years), “d” (days), “h” (hours), “m” (minutes), or “s”(seconds) for `lifeimte`. If you do not want the token to expire, set the lifetime to “0”. Setting it to zero gives the token a lifetime of approximately 10 years. Do consider correctly filling out 'description', 'client', and 'label' with accurate information (they're all optional and can be removed if needed). 'description', 'client', and 'label' help with token audits.
+
+```powershell
+$puppetMaster = 'puppet.contoso.com'
+$cred = Get-Credential -Message 'Puppet Credentials (e.g. myuser-p)'
+$req = [PSCustomObject]@{
+    login    = $cred.UserName
+    password = $cred.GetNetworkCredential().Password
+    lifetime = '1d'
+    description = "Token used for testing puppet tasks"
+    client = ""
+    label = "personal workstation token"
+} | ConvertTo-Json
+
+$hoststr = "https://$puppet`:4433/rbac-api/v1/auth/token"
+$result  = Invoke-RestMethod -Uri $hoststr -Method Post -Body $req -ContentType 'application/json'
+$result
+```
+OUTPUT
+```
+token
+-----
+***********************************wCB8
+```
 
 ## Examples
 ### Get tasks
