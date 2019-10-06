@@ -34,5 +34,7 @@ Function Get-PuppetTasks {
     $headers = @{'X-Authentication' = $Token}
     $body    = @{'environment' = $environment}
     $result  = Invoke-RestMethod -Uri $uri -Method Get -Headers $headers -Body $body
-    Write-Output $result.items
+    foreach ($item in $result.items) {
+        Write-Output $item
+    }
 }
