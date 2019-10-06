@@ -48,7 +48,7 @@ Function Get-PuppetTask {
 
     # try and get the task in it's standard form $moduleName/$taskName
     try {
-        $result  = Invoke-RestMethod -Uri $hoststr -Method Get -Headers $headers -ErrorAction SilentlyContinue
+        $result = Invoke-RestMethod -Uri $hoststr -Method Get -Headers $headers -ErrorAction SilentlyContinue
     } catch {
         # try and get the task again assuming it's built in with a default task name of 'init' (e.g. reboot/init)
         try {
