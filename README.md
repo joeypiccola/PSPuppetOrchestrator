@@ -11,6 +11,20 @@ PowerShell module for calling the Puppet Orchestrator API.
 ```powershell
 PS> Install-Module -Name PSPuppetOrchestrator
 ```
+## Functions
+`Invoke-PuppetTask`
+
+`Get-PuppetTask`
+
+`Get-PuppetTasks`
+
+`Get-PuppetJob`
+
+`Get-PuppetJobReport`
+
+`Get-PuppetJobResults`
+
+`Get-PuppetPCPNodeBrokerDetails`
 
 ## Examples
 ### Get tasks
