@@ -42,7 +42,7 @@ $req = [PSCustomObject]@{
     label = "personal workstation token"
 } | ConvertTo-Json
 
-$hoststr = "https://$puppet`:4433/rbac-api/v1/auth/token"
+$hoststr = "https://$puppetMaster`:4433/rbac-api/v1/auth/token"
 $result  = Invoke-RestMethod -Uri $hoststr -Method Post -Body $req -ContentType 'application/json'
 $result
 ```
