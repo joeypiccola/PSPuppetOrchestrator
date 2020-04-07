@@ -44,6 +44,8 @@ Function Invoke-PuppetTask {
             WaitLoopInterval = 2
         }
         PS> Invoke-PuppetTask @invokePuppetTaskSplat
+
+        job info
     #>
 
     Param(
