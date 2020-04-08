@@ -124,16 +124,15 @@ Function Invoke-PuppetTask {
     $headers = @{'X-Authentication' = $Token}
 
     $result  = Invoke-RestMethod -Uri $hoststr -Method Post -Headers $headers -Body $req
-    $content = $result
 
-    if ($wait) {
+    if ($PSBoundParameters.ContainsKey('wait')) {
         # sleep 5s for the job to register
         Start-Sleep -Seconds 5
 
         $jobSplat = @{
             token  = $Token
             master = $master
-            id     = $content.job.name
+            id     = $result.job.name
         }
 
         # create a timespan
@@ -157,6 +156,6 @@ Function Invoke-PuppetTask {
             break
         }
     } else {
-        Write-Output $content.job
+        Write-Output $result.job
     }
 }
