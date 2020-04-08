@@ -13,12 +13,15 @@ Function Invoke-PuppetTask {
     .PARAMETER Description
         A description to submit along with the task.
     .PARAMETER Nodes
-        An array of nodes the Puppet task will be invoked against, e.g. $Scope = @('DEN3W108R2PSV5','DEN3W108R2PSV4','DEN3W108R2PSV3').
+        An array of node names to target, e.g. $Scope = @('DEN3W108R2PSV5','DEN3W108R2PSV4','DEN3W108R2PSV3').
     .PARAMETER Query
-        A PuppetDB query the Puppet task will be invoked against, e.g. '["from", "inventory", ["=", "facts.os.name", "windows"]]'.
+        A PuppetDB or PQL query to use to discover nodes. The target is built from the certname values collected at
+        the top level of the query, e.g. '["from", "inventory", ["=", "facts.os.name", "windows"]]'.
     .PARAMETER Node_group
-        A GUID of a node group the Puppet task will be invoked against, e.g. 7a692b61-8087-4452-9cf8-58ed2acee2a0.
-        Can be found in a URL of the WebUI when on a selected node group.
+        A classifier node group ID. The ID must correspond to a node group that has defined rules. It is not sufficient
+        for parent groups of the node group in question to define rules. The user must also have permissions to view the
+        node group. Any nodes specified in the scope that the user does not have permissions to run the task on are
+        excluded, e.g. 7a692b61-8087-4452-9cf8-58ed2acee2a0.
     .PARAMETER WaitLoopInterval
         An optional time in seconds that the wait feature will re-check the invoked task. DEFAULTS to 5s.
     .PARAMETER Wait
