@@ -12,10 +12,25 @@ Invoke a Puppet task.
 
 ## SYNTAX
 
+### nodes
 ```
-Invoke-PuppetTask [-Token] <String> [-Master] <String> [-Task] <String> [[-Environment] <String>]
- [[-Parameters] <Hashtable>] [[-Description] <String>] [-Scope] <String[]> [[-ScopeType] <String>]
- [[-Wait] <Int32>] [[-WaitLoopInterval] <Int32>] [<CommonParameters>]
+Invoke-PuppetTask -Token <String> -Master <String> -Task <String> [-Environment <String>]
+ [-Parameters <Hashtable>] [-Description <String>] [-Wait <Int32>] [-WaitLoopInterval <Int32>]
+ -Nodes <String[]> [<CommonParameters>]
+```
+
+### query
+```
+Invoke-PuppetTask -Token <String> -Master <String> -Task <String> [-Environment <String>]
+ [-Parameters <Hashtable>] [-Description <String>] [-Wait <Int32>] [-WaitLoopInterval <Int32>] -Query <String>
+ [<CommonParameters>]
+```
+
+### node_group
+```
+Invoke-PuppetTask -Token <String> -Master <String> -Task <String> [-Environment <String>]
+ [-Parameters <Hashtable>] [-Description <String>] [-Wait <Int32>] [-WaitLoopInterval <Int32>]
+ -Node_group <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -26,20 +41,56 @@ Invoke a Puppet task.
 ### EXAMPLE 1
 ```
 $invokePuppetTaskSplat = @{
-```
-
-Token            = $token
+    Token            = $token
     Master           = $master
     Task             = 'powershell_tasks::disablesmbv1'
     Environment      = 'production'
     Parameters       = @{action = 'set'; reboot = $true}
     Description      = 'Disable smbv1 on 08r2 nodes.'
-    Scope            = @('DEN3W108R2PSV5','DEN3W108R2PSV4','DEN3W108R2PSV3')
-    ScopeType        = 'nodes'
-    Wait             = 120
-    WaitLoopInterval = 2
+    Nodes            = @('DEN3W108R2PSV5','DEN3W108R2PSV4','DEN3W108R2PSV3')
 }
-PS\> Invoke-PuppetTask @invokePuppetTaskSplat
+PS> Invoke-PuppetTask @invokePuppetTaskSplat
+```
+
+id                                                       name
+--                                                       ----
+https://puppet.contoso.us:8143/orchestrator/v1/jobs/1318 1318
+
+### EXAMPLE 2
+```
+$invokePuppetTaskSplat = @{
+    Token            = $token
+    Master           = $master
+    Task             = 'powershell_tasks::disablesmbv1'
+    Environment      = 'production'
+    Parameters       = @{action = 'set'; reboot = $true}
+    Description      = 'Disable smbv1 on 08r2 nodes.'
+    Query            = '["from", "inventory", ["=", "facts.os.name", "windows"]]'
+}
+PS> Invoke-PuppetTask @invokePuppetTaskSplat
+```
+
+id                                                       name
+--                                                       ----
+https://puppet.contoso.us:8143/orchestrator/v1/jobs/1318 1318
+
+### EXAMPLE 3
+```
+$invokePuppetTaskSplat = @{
+    Token            = $token
+    Master           = $master
+    Task             = 'powershell_tasks::disablesmbv1'
+    Environment      = 'production'
+    Parameters       = @{action = 'set'; reboot = $true}
+    Description      = 'Disable smbv1 on 08r2 nodes.'
+    Node_group       = '7a692b61-8087-4452-9cf8-58ed2acee2a0'
+}
+PS> Invoke-PuppetTask @invokePuppetTaskSplat
+```
+
+id                                                       name
+--                                                       ----
+https://puppet.contoso.us:8143/orchestrator/v1/jobs/1318 1318
 
 ## PARAMETERS
 
@@ -52,7 +103,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: 1
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -67,7 +118,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: 2
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -82,7 +133,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: 3
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -97,7 +148,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 4
+Position: Named
 Default value: Production
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -113,7 +164,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 5
+Position: Named
 Default value: @{}
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -128,43 +179,8 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 6
+Position: Named
 Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Scope
-An array of nodes the Puppet task will be invoked against, e.g.
-$Scope = @('DEN3W108R2PSV5','DEN3W108R2PSV4','DEN3W108R2PSV3').
-
-```yaml
-Type: String[]
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: 7
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ScopeType
-When executing tasks against the /command/task API endpoint you can either use
-a scope type of 'node' or 'query'.
-At this time, PSPuppetOrchestrator only
-supports a ScopeType of 'node' which is the DEFAULT and only allowed option for
-the ScopeType parameter.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 8
-Default value: Nodes
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -181,7 +197,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 9
+Position: Named
 Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -197,8 +213,65 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 10
+Position: Named
 Default value: 5
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Nodes
+An array of node names to target, e.g.
+$Scope = @('DEN3W108R2PSV5','DEN3W108R2PSV4','DEN3W108R2PSV3').
+
+```yaml
+Type: String[]
+Parameter Sets: nodes
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Query
+A PuppetDB or PQL query to use to discover nodes.
+The target is built from the certname values collected at
+the top level of the query, e.g.
+'\["from", "inventory", \["=", "facts.os.name", "windows"\]\]'.
+
+```yaml
+Type: String
+Parameter Sets: query
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Node_group
+A classifier node group ID.
+The ID must correspond to a node group that has defined rules.
+It is not sufficient
+for parent groups of the node group in question to define rules.
+The user must also have permissions to view the
+node group.
+Any nodes specified in the scope that the user does not have permissions to run the task on are
+excluded, e.g.
+7a692b61-8087-4452-9cf8-58ed2acee2a0.
+
+```yaml
+Type: String
+Parameter Sets: node_group
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
