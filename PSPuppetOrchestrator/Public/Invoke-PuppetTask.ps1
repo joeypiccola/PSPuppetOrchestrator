@@ -12,20 +12,22 @@ Function Invoke-PuppetTask {
         A hash of parameters to supply the Puppet task, e.g. $Parameters = @{tp1 = 'foo';tp2 = 'bar'; tp3 = $true}.
     .PARAMETER Description
         A description to submit along with the task.
-    .PARAMETER Scope
-        An array of nodes the Puppet task will be invoked against, e.g. $Scope = @('DEN3W108R2PSV5','DEN3W108R2PSV4','DEN3W108R2PSV3').
-    .PARAMETER ScopeType
-        When executing tasks against the /command/task API endpoint you can either use
-        a scope type of 'node' or 'query'. At this time, PSPuppetOrchestrator only
-        supports a ScopeType of 'node' which is the DEFAULT and only allowed option for
-        the ScopeType parameter.
+    .PARAMETER Nodes
+        An array of node names to target, e.g. $Scope = @('DEN3W108R2PSV5','DEN3W108R2PSV4','DEN3W108R2PSV3').
+    .PARAMETER Query
+        A PuppetDB or PQL query to use to discover nodes. The target is built from the certname values collected at
+        the top level of the query, e.g. '["from", "inventory", ["=", "facts.os.name", "windows"]]'.
+    .PARAMETER Node_group
+        A classifier node group ID. The ID must correspond to a node group that has defined rules. It is not sufficient
+        for parent groups of the node group in question to define rules. The user must also have permissions to view the
+        node group. Any nodes specified in the scope that the user does not have permissions to run the task on are
+        excluded, e.g. 7a692b61-8087-4452-9cf8-58ed2acee2a0.
+    .PARAMETER WaitLoopInterval
+        An optional time in seconds that the wait feature will re-check the invoked task. DEFAULTS to 5s.
     .PARAMETER Wait
         An optional wait value in seconds that Invoke-PuppetTask will use to wait until
         the invoked task completes. If the wait time is exceeded Invoke-PuppetTask will
         return a warning.
-    .PARAMETER WaitLoopInterval
-        An optional time in seconds that the wait feature will re-check the invoked task.
-        DEFAULTS to 5s.
     .PARAMETER Token
         The Puppet API orchestrator token.
     .PARAMETER Master
@@ -38,12 +40,43 @@ Function Invoke-PuppetTask {
             Environment      = 'production'
             Parameters       = @{action = 'set'; reboot = $true}
             Description      = 'Disable smbv1 on 08r2 nodes.'
-            Scope            = @('DEN3W108R2PSV5','DEN3W108R2PSV4','DEN3W108R2PSV3')
-            ScopeType        = 'nodes'
-            Wait             = 120
-            WaitLoopInterval = 2
+            Nodes            = @('DEN3W108R2PSV5','DEN3W108R2PSV4','DEN3W108R2PSV3')
         }
         PS> Invoke-PuppetTask @invokePuppetTaskSplat
+
+        id                                                       name
+        --                                                       ----
+        https://puppet.contoso.us:8143/orchestrator/v1/jobs/1318 1318
+    .EXAMPLE
+        $invokePuppetTaskSplat = @{
+            Token            = $token
+            Master           = $master
+            Task             = 'powershell_tasks::disablesmbv1'
+            Environment      = 'production'
+            Parameters       = @{action = 'set'; reboot = $true}
+            Description      = 'Disable smbv1 on 08r2 nodes.'
+            Query            = '["from", "inventory", ["=", "facts.os.name", "windows"]]'
+        }
+        PS> Invoke-PuppetTask @invokePuppetTaskSplat
+
+        id                                                       name
+        --                                                       ----
+        https://puppet.contoso.us:8143/orchestrator/v1/jobs/1318 1318
+    .EXAMPLE
+        $invokePuppetTaskSplat = @{
+            Token            = $token
+            Master           = $master
+            Task             = 'powershell_tasks::disablesmbv1'
+            Environment      = 'production'
+            Parameters       = @{action = 'set'; reboot = $true}
+            Description      = 'Disable smbv1 on 08r2 nodes.'
+            Node_group       = '7a692b61-8087-4452-9cf8-58ed2acee2a0'
+        }
+        PS> Invoke-PuppetTask @invokePuppetTaskSplat
+
+        id                                                       name
+        --                                                       ----
+        https://puppet.contoso.us:8143/orchestrator/v1/jobs/1318 1318
     #>
 
     Param(
@@ -59,16 +92,26 @@ Function Invoke-PuppetTask {
         [hashtable]$Parameters = @{},
         [Parameter()]
         [string]$Description = '',
-        [Parameter(Mandatory)]
-        [string[]]$Scope,
-        [Parameter()]
-        [ValidateSet('nodes')]
-        [string]$ScopeType = 'nodes',
         [Parameter()]
         [int]$Wait,
         [Parameter()]
-        [int]$WaitLoopInterval = 5
+        [int]$WaitLoopInterval = 5,
+        [Parameter(Mandatory, ParameterSetName = "nodes")]
+        [string[]]$Nodes,
+        [Parameter(Mandatory, ParameterSetName = "query")]
+        [string]$Query,
+        [Parameter(Mandatory, ParameterSetName = "node_group")]
+        [string]$Node_group
     )
+
+    # set the scope type to the name of the oh so cleverly named parameter set
+    $scopeType = $PSCmdlet.ParameterSetName
+    # set the scope to the value of the single parameter of the choosen parameter set
+    switch ($scopeType) {
+        'nodes'      {$scope = $Nodes}
+        'query'      {$scope = $Query}
+        'node_group' {$scope = $Node_group}
+    }
 
     $req = [PSCustomObject]@{
         environment = $Environment
@@ -76,24 +119,23 @@ Function Invoke-PuppetTask {
         params      = $Parameters
         description = $Description
         scope       = [PSCustomObject]@{
-            $ScopeType  = $Scope
+            $scopeType  = $scope
         }
     } | ConvertTo-Json
-    $req
+
     $hoststr = "https://$master`:8143/orchestrator/v1/command/task"
     $headers = @{'X-Authentication' = $Token}
 
     $result  = Invoke-RestMethod -Uri $hoststr -Method Post -Headers $headers -Body $req
-    $content = $result
 
-    if ($wait) {
+    if ($PSBoundParameters.ContainsKey('wait')) {
         # sleep 5s for the job to register
         Start-Sleep -Seconds 5
 
         $jobSplat = @{
             token  = $Token
             master = $master
-            id     = $content.job.name
+            id     = $result.job.name
         }
 
         # create a timespan
@@ -117,6 +159,6 @@ Function Invoke-PuppetTask {
             break
         }
     } else {
-        Write-Output $content.job
+        Write-Output $result.job
     }
 }
