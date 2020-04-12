@@ -11,6 +11,9 @@ Locale: en-US
 {{ Fill in the Description }}
 
 ## PSPuppetOrchestrator Cmdlets
+### [Get-PuppetAuthToken](Get-PuppetAuthToken.md)
+{{ Fill in the Description }}
+
 ### [Get-PuppetJob](Get-PuppetJob.md)
 {{ Fill in the Description }}
 
@@ -30,6 +33,12 @@ Locale: en-US
 {{ Fill in the Description }}
 
 ### [Invoke-PuppetTask](Invoke-PuppetTask.md)
+{{ Fill in the Description }}
+
+### [Set-ServerCertificateValidationCallback](Set-ServerCertificateValidationCallback.md)
+{{ Fill in the Description }}
+
+### [Set-SkipCertificateCheck](Set-SkipCertificateCheck.md)
 {{ Fill in the Description }}
 
 ### [Wait-PuppetNodePCPBroker](Wait-PuppetNodePCPBroker.md)
