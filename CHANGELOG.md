@@ -5,9 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## [0.1.9]
+### Added
+- Move to 100% PowerShellBuild `0.4.0` build process.
+
 ## [0.1.8]
-## Added
-- `Get-PuppetAuthToken` You can now provide a server name for your Puppet master and optionally a listening port, along with a credential, and easily obtain an api auth token for use with the rest of the cmdlets in the module.
+### Added
+- `Get-PuppetAuthToken` You can now provide a server name for your Puppet master and optionally a listening port, along with a credential, and easily obtain an api auth token for use with the rest of the cmdlets in the module. (via [RandomNoun7](https://github.com/RandomNoun7))
 
 ## [0.1.7]
 ### Changed

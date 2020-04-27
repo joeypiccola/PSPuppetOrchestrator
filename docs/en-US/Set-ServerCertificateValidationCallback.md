@@ -13,7 +13,7 @@ A stub for testing purposes.
 ## SYNTAX
 
 ```
-Set-ServerCertificateValidationCallback
+Set-ServerCertificateValidationCallback [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -33,6 +33,9 @@ the ServerCertificateValidationCallback method in a way that's easier to
 Mock during testing.
 
 ## PARAMETERS
+
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

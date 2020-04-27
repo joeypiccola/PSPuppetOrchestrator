@@ -1,4 +1,4 @@
-version: 0.1.6.{build}
+version: 0.1.9.{build}
 
 environment:
   matrix:
@@ -8,7 +8,7 @@ environment:
       PowerShellEdition: WindowsPowerShell
 
 skip_commits:
-  message: /updated readme.*|update readme.*|update changelog.*|update changelog.*s/
+  message: /doc update.*|updated readme.*|update readme.*|update changelog.*|update changelog.*s/
 build: off
 
 # Kick off the CI/CD pipeline

@@ -1,17 +1,10 @@
 
 # Taken with love from @juneb_get_help (https://raw.githubusercontent.com/juneb/PesterTDD/master/Module.Help.Tests.ps1)
 
-#$outputDir       = Join-Path -Path $ENV:BHProjectPath -ChildPath 'Output'
-$outputDir       = $ENV:BHBuildOutput
-$outputModDir    = Join-Path -Path $outputDir -ChildPath $env:BHProjectName
-$manifest        = Import-PowerShellDataFile -Path $env:BHPSModuleManifest
-$outputModVerDir = Join-Path -Path $outputModDir -ChildPath $manifest.ModuleVersion
+Get-Module $env:BHProjectName | Remove-Module -Force
+$ModuleManifestPath = Join-Path -Path $env:BHBuildOutput -ChildPath "$($env:BHProjectName).psd1"
+Import-Module $ModuleManifestPath -Force
 
-# Get module commands
-# Remove all versions of the module from the session. Pester can't handle multiple versions.
-#Get-Module $env:BHProjectName | Remove-Module -Force
-#Import-Module -Name (Join-Path -Path $outputModVerDir -ChildPath "$($env:BHProjectName).psd1") -Verbose:$false -ErrorAction Stop
-Import-Module $outputModDir
 $commands = Get-Command -Module (Get-Module $env:BHProjectName) -CommandType Cmdlet, Function  # Not alias
 
 ## When testing help, remember that help is cached at the beginning of each session.
