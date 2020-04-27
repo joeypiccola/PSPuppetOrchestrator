@@ -1,10 +1,7 @@
 
 $moduleName         = $env:BHProjectName
-$manifest           = Import-PowerShellDataFile -Path $env:BHPSModuleManifest
-$outputDir          = Join-Path -Path $ENV:BHProjectPath -ChildPath 'BuildOutput'
-$outputModDir       = Join-Path -Path $outputDir -ChildPath $env:BHProjectName
-$outputModVerDir    = Join-Path -Path $outputModDir -ChildPath $manifest.ModuleVersion
-$outputManifestPath = Join-Path -Path $outputModDir -Child "$($moduleName).psd1"
+$outputManifestPath = Join-Path -Path $env:BHBuildOutput -ChildPath "$($env:BHProjectName).psd1"
+$manifest           = Import-PowerShellDataFile -Path $outputManifestPath
 $changelogPath      = Join-Path -Path $env:BHProjectPath -Child 'CHANGELOG.md'
 
 Describe 'Module manifest' {

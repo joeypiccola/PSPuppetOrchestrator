@@ -1,3 +1,7 @@
+Get-Module $env:BHProjectName | Remove-Module -Force
+$ModuleManifestPath = Join-Path -Path $env:BHBuildOutput -ChildPath "$($env:BHProjectName).psd1"
+Import-Module $ModuleManifestPath -Force
+
 InModuleScope PSPuppetOrchestrator {
     Describe 'Get-PuppetJobResults' -Tag unit {
         function Invoke-RestMethod {}
